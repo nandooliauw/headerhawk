@@ -1,0 +1,360 @@
+{
+  "tool": "headerhawk",
+  "version": "1.0.0",
+  "target": "https://example.com/",
+  "final_url": "https://example.com/",
+  "generated_at": "2026-11-20 03:12:27 UTC",
+  "score": 35,
+  "grade": "F",
+  "counts": {
+    "pass": 4,
+    "warn": 1,
+    "fail": 7,
+    "skip": 1,
+    "info": 0
+  },
+  "categories": [
+    {
+      "category": "exposure",
+      "score": 100,
+      "points": "13/13"
+    },
+    {
+      "category": "headers",
+      "score": 4,
+      "points": "2.5/60"
+    },
+    {
+      "category": "tls",
+      "score": 100,
+      "points": "15/15"
+    }
+  ],
+  "checks": [
+    {
+      "id": "HDR-01",
+      "title": "HTTP Strict Transport Security",
+      "category": "headers",
+      "severity": "high",
+      "weight": 12,
+      "status": "fail",
+      "evidence": "Header absent",
+      "remediation": "Send `Strict-Transport-Security: max-age=31536000; includeSubDomains` on every HTTPS response.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "HDR-02",
+      "title": "Content Security Policy",
+      "category": "headers",
+      "severity": "high",
+      "weight": 12,
+      "status": "fail",
+      "evidence": "Header absent",
+      "remediation": "Add a restrictive CSP, e.g. `default-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'`.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "HDR-03",
+      "title": "Clickjacking protection",
+      "category": "headers",
+      "severity": "medium",
+      "weight": 8,
+      "status": "fail",
+      "evidence": "Neither X-Frame-Options nor CSP frame-ancestors present",
+      "remediation": "Send `X-Frame-Options: DENY` (or `SAMEORIGIN`), or the modern equivalent `Content-Security-Policy: frame-ancestors 'none'`.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "HDR-04",
+      "title": "MIME type sniffing protection",
+      "category": "headers",
+      "severity": "low",
+      "weight": 8,
+      "status": "fail",
+      "evidence": "Header absent",
+      "remediation": "Send `X-Content-Type-Options: nosniff`.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"
+      ]
+    },
+    {
+      "id": "HDR-05",
+      "title": "Referrer policy",
+      "category": "headers",
+      "severity": "low",
+      "weight": 6,
+      "status": "fail",
+      "evidence": "Header absent (browser default leaks full URLs cross-origin)",
+      "remediation": "Send `Referrer-Policy: strict-origin-when-cross-origin`.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy"
+      ]
+    },
+    {
+      "id": "HDR-06",
+      "title": "Permissions policy",
+      "category": "headers",
+      "severity": "low",
+      "weight": 4,
+      "status": "fail",
+      "evidence": "Header absent",
+      "remediation": "Send `Permissions-Policy: geolocation=(), microphone=(), camera=()` to disable powerful browser features you do not use.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy"
+      ]
+    },
+    {
+      "id": "HDR-07",
+      "title": "Cross-origin isolation",
+      "category": "headers",
+      "severity": "low",
+      "weight": 5,
+      "status": "fail",
+      "evidence": "No COOP/CORP/COEP headers",
+      "remediation": "Send `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Resource-Policy: same-origin`.",
+      "references": [
+        "https://web.dev/articles/coop-coep"
+      ]
+    },
+    {
+      "id": "HDR-08",
+      "title": "Version disclosure",
+      "category": "headers",
+      "severity": "low",
+      "weight": 5,
+      "status": "warn",
+      "evidence": "server: cloudflare",
+      "remediation": "Remove or strip down `Server` and `X-Powered-By` headers; stack versions help attackers pick exploits.",
+      "references": [
+        "https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration"
+      ]
+    },
+    {
+      "id": "CK-01",
+      "title": "Cookie security attributes",
+      "category": "cookies",
+      "severity": "medium",
+      "weight": 12,
+      "status": "skip",
+      "evidence": "No Set-Cookie header on the audited response",
+      "remediation": "Every session cookie needs `Secure; HttpOnly; SameSite=Lax` (or `SameSite=Strict`).",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "TLS-01",
+      "title": "TLS protocol version",
+      "category": "tls",
+      "severity": "high",
+      "weight": 8,
+      "status": "pass",
+      "evidence": "Negotiated TLSv1.3",
+      "remediation": "Allow only TLS 1.2 and TLS 1.3; disable TLS 1.0/1.1 and SSLv3.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "TLS-02",
+      "title": "Cipher suite strength",
+      "category": "tls",
+      "severity": "medium",
+      "weight": 4,
+      "status": "pass",
+      "evidence": "TLS_AES_256_GCM_SHA384 (256 bit)",
+      "remediation": "Prefer AEAD suites (AES-GCM, ChaCha20-Poly1305); disable RC4, 3DES and NULL.",
+      "references": [
+        "https://ssl-config.mozilla.org/"
+      ]
+    },
+    {
+      "id": "TLS-03",
+      "title": "Certificate validity",
+      "category": "tls",
+      "severity": "high",
+      "weight": 3,
+      "status": "pass",
+      "evidence": "35 day(s) remaining, issued by Cloudflare TLS Issuing ECC CA 3",
+      "remediation": "Renew before expiry and automate renewal (ACME).",
+      "references": [
+        "https://letsencrypt.org/docs/"
+      ]
+    },
+    {
+      "id": "EXP-01",
+      "title": "Sensitive path exposure",
+      "category": "exposure",
+      "severity": "critical",
+      "weight": 13,
+      "status": "pass",
+      "evidence": "8 paths probed, none returned a real leak",
+      "remediation": "Remove the file from the web root, block the path at the reverse proxy, and rotate any credential it contained.",
+      "references": [
+        "https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration"
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "path": "/.git/HEAD",
+      "url": "https://example.com/.git/HEAD",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "git_repo",
+      "confirmed": false
+    },
+    {
+      "path": "/.env",
+      "url": "https://example.com/.env",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "dotenv",
+      "confirmed": false
+    },
+    {
+      "path": "/.svn/entries",
+      "url": "https://example.com/.svn/entries",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "svn_repo",
+      "confirmed": false
+    },
+    {
+      "path": "/.DS_Store",
+      "url": "https://example.com/.DS_Store",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "ds_store",
+      "confirmed": false
+    },
+    {
+      "path": "/phpinfo.php",
+      "url": "https://example.com/phpinfo.php",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "phpinfo",
+      "confirmed": false
+    },
+    {
+      "path": "/server-status",
+      "url": "https://example.com/server-status",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "apache_status",
+      "confirmed": false
+    },
+    {
+      "path": "/actuator/env",
+      "url": "https://example.com/actuator/env",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "spring_actuator",
+      "confirmed": false
+    },
+    {
+      "path": "/wp-config.php.bak",
+      "url": "https://example.com/wp-config.php.bak",
+      "status": 404,
+      "length": 577,
+      "content_type": "text/html; charset=utf-8",
+      "snippet": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "error": "",
+      "kind": "wp_config_backup",
+      "confirmed": false
+    }
+  ],
+  "response": {
+    "status": 200,
+    "redirects": [
+      {
+        "url": "https://example.com/",
+        "status": 200,
+        "location": ""
+      }
+    ],
+    "headers": {
+      "accept-ranges": [
+        "bytes"
+      ],
+      "age": [
+        "2"
+      ],
+      "allow": [
+        "GET, HEAD"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "HIT"
+      ],
+      "cf-ray": [
+        "a5d445de6d0da39b-SIN"
+      ],
+      "connection": [
+        "close"
+      ],
+      "content-type": [
+        "text/html; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 20 Nov 2026 03:12:25 GMT"
+      ],
+      "last-modified": [
+        "Thu, 19 Nov 2026 22:10:26 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ]
+    },
+    "tls": {
+      "version": "TLSv1.3",
+      "cipher": "TLS_AES_256_GCM_SHA384",
+      "cipher_bits": 256,
+      "subject": "commonName=example.com",
+      "issuer": "countryName=US, organizationName=SSL Corporation, commonName=Cloudflare TLS Issuing ECC CA 3",
+      "not_before": "Sep 26 22:49:11 2026 GMT",
+      "not_after": "Dec 25 22:56:35 2026 GMT",
+      "days_until_expiry": 35,
+      "expired": false,
+      "weak_cipher": false,
+      "sni": true,
+      "sans": [
+        "example.com",
+        "*.example.com"
+      ]
+    },
+    "error": ""
+  }
+}

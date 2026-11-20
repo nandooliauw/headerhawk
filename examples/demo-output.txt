@@ -1,0 +1,30 @@
+headerhawk  2026-11-20 03:12:25 UTC
+target    https://github.com/
+status    HTTP 200   redirects=0
+
+score 73/100  grade C   7 pass  3 warn  2 fail  0 skip
+
+PASS  HDR-01  HTTP Strict Transport Security   max-age=31536000s; includeSubDomains, preload
+WARN  HDR-02  Content Security Policy          Present but weakened by 'unsafe-inline'
+PASS  HDR-03  Clickjacking protection          X-Frame-Options: DENY
+PASS  HDR-04  MIME type sniffing protection    X-Content-Type-Options: nosniff
+PASS  HDR-05  Referrer policy                  Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin
+FAIL  HDR-06  Permissions policy               Header absent
+FAIL  HDR-07  Cross-origin isolation           No COOP/CORP/COEP headers
+WARN  HDR-08  Version disclosure               server: github.com
+WARN  CK-01   Cookie security attributes       _octo: missing HttpOnly
+PASS  TLS-01  TLS protocol version             Negotiated TLSv1.3
+PASS  TLS-02  Cipher suite strength            TLS_AES_128_GCM_SHA256 (128 bit)
+PASS  TLS-03  Certificate validity             68 day(s) remaining, issued by Sectigo Public Server Authentication CA DV E36
+
+findings (5)
+  [HIGH] HDR-02 Content Security Policy
+    fix: Add a restrictive CSP, e.g. `default-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'`.
+  [MEDIUM] CK-01 Cookie security attributes
+    fix: Every session cookie needs `Secure; HttpOnly; SameSite=Lax` (or `SameSite=Strict`).
+  [LOW] HDR-06 Permissions policy
+    fix: Send `Permissions-Policy: geolocation=(), microphone=(), camera=()` to disable powerful browser features you do not use.
+  [LOW] HDR-07 Cross-origin isolation
+    fix: Send `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Resource-Policy: same-origin`.
+  [LOW] HDR-08 Version disclosure
+    fix: Remove or strip down `Server` and `X-Powered-By` headers; stack versions help attackers pick exploits.
