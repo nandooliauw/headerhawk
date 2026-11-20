@@ -276,6 +276,6 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-Built by Fernando Iskandar. Header weights follow OWASP Secure Headers Project
+Built by Fernando. Header weights follow OWASP Secure Headers Project
 guidance; the scoring model is my own and documented above so you can disagree
 with it precisely.
